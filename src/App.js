@@ -162,7 +162,7 @@ export default function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("/qbit")
+    fetch("https://sndu46.deta.dev/qbit")
       .then((res) => res.json())
       .then((data) => setData(data.torrents));
     console.log(data);
