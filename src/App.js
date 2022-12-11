@@ -1,62 +1,104 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
-import ProgressBar from '@ramonak/react-progress-bar';
-import { LinearProgress } from '@mui/material/';
-import { ThemeProvider, createTheme, rgbToHex } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import { purple } from '@mui/material/colors';
-import TemporaryDrawer from './Drawer';
-import BasicCard from './Card';
+import logo from "./logo.svg";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from "react";
+import { Alert } from "react-bootstrap";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Box from "@mui/material/Box";
+import ProgressBar from "@ramonak/react-progress-bar";
+import { LinearProgress } from "@mui/material/";
+import { ThemeProvider, createTheme, rgbToHex } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import { purple } from "@mui/material/colors";
+import TemporaryDrawer from "./Drawer";
+import BasicCard from "./Card";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
   },
 });
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
   backgroundColor: purple[500],
-  '&:hover': {
+  "&:hover": {
     backgroundColor: purple[700],
   },
 }));
 
-function MyButton({count, onClick}) {
+// login component one column with username and password
+function Login() {
   return (
-    <button onClick={onClick}>
-      Clicked {count} times
-    </button>
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <div className="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+            />
+            <small id="emailHelp" className="form-text text-muted">
+              We'll never share your email with anyone else.
+            </small>
+          </div>
+          <div className="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+              placeholder="Password"
+            />
+          </div>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="exampleCheck1"
+            />
+            <label className="form-check-label" for="exampleCheck1">
+              Check me out
+            </label>
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
   );
+}
+
+function MyButton({ count, onClick }) {
+  return <button onClick={onClick}>Clicked {count} times</button>;
 }
 
 function ProductCategoryRow({ category }) {
   return (
     <tr>
-      <th colSpan="2">
-        {category}
-      </th>
+      <th colSpan="2">{category}</th>
     </tr>
   );
 }
 
 function ProductRow({ product }) {
-  const name = product.stocked ? product.name :
-    <span style={{ color: 'red' }}>
-      {product.name}
-    </span>;
+  const name = product.stocked ? (
+    product.name
+  ) : (
+    <span style={{ color: "red" }}>{product.name}</span>
+  );
 
   return (
     <tr>
@@ -71,11 +113,7 @@ function ProductTable({ products, filterText, inStockOnly }) {
   let lastCategory = null;
 
   products.forEach((product) => {
-    if (
-      product.name.toLowerCase().indexOf(
-        filterText.toLowerCase()
-      ) === -1
-    ) {
+    if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
     if (inStockOnly && !product.stocked) {
@@ -85,14 +123,11 @@ function ProductTable({ products, filterText, inStockOnly }) {
       rows.push(
         <ProductCategoryRow
           category={product.category}
-          key={product.category} />
+          key={product.category}
+        />
       );
     }
-    rows.push(
-      <ProductRow
-        product={product}
-        key={product.name} />
-    );
+    rows.push(<ProductRow product={product} key={product.name} />);
     lastCategory = product.category;
   });
 
@@ -109,53 +144,61 @@ function ProductTable({ products, filterText, inStockOnly }) {
   );
 }
 
-function SearchBar( {filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange}) {
+function SearchBar({
+  filterText,
+  inStockOnly,
+  onFilterTextChange,
+  onInStockOnlyChange,
+}) {
   return (
     <form>
-      <input 
-        type="text" 
+      <input
+        type="text"
         value={filterText}
-        placeholder="Search..." 
-        onChange={(e) => onFilterTextChange(e.target.value)}/><br/>
+        placeholder="Search..."
+        onChange={(e) => onFilterTextChange(e.target.value)}
+      />
+      <br />
       <label>
-        <input 
+        <input
           type="checkbox"
-          checked={inStockOnly} 
-          onChange={(e) => onInStockOnlyChange(e.target.checked)}/>
-        {' '}
+          checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)}
+        />{" "}
         Only show products in stock
       </label>
     </form>
   );
 }
-function TorrentCard(){
-
-};
 
 function FilterableProductTable({ products }) {
-
-  const [filterText, setFilterText] = useState('');
+  const [filterText, setFilterText] = useState("");
   const [inStockOnly, setInStockOnly] = useState(false);
 
   return (
     <div>
-      <SearchBar 
+      <SearchBar
         filterText={filterText}
-        inStockOnly={inStockOnly} 
+        inStockOnly={inStockOnly}
         onFilterTextChange={setFilterText}
-        onInStockOnlyChange={setInStockOnly}/>
-      <ProductTable products={products} filterText={filterText} inStockOnly={inStockOnly} />
+        onInStockOnlyChange={setInStockOnly}
+      />
+      <ProductTable
+        products={products}
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+      />
     </div>
   );
 }
 
 const PRODUCTS = [
-  {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
-  {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
-  {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
-  {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
-  {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
-  {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
+  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
+  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
+  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" },
 ];
 
 export default function App() {
@@ -166,56 +209,64 @@ export default function App() {
       .then((res) => res.json())
       .then((data) => setData(data.torrents));
     console.log(data);
-  }, []);
+  });
   return (
-    <div>
+    <div style={{ backgroundColor: "#424242" }}>
       <ThemeProvider theme={darkTheme}>
-      <BasicCard/>
-      <div style={{textAlign:"center",backgroundColor:"#424242"}}>
-      <TemporaryDrawer/>
-      
-        <h1 style={{color: 'white'}}>Torrents</h1>
+        <BasicCard />
+        <div style={{ textAlign: "center", backgroundColor: "#424242" }}>
+          <TemporaryDrawer />
+          <Login />
+          <h1 style={{ color: "white" }}>Files</h1>
           {
-            !data ? "Loading..." : data.map(torrent =>(
-              <>
-              <Stack direction="row" spacing={2}>
-              <Box sx={{ml:"5%", mb:"1%", width: "60%"}}>
-              <Accordion sx={{borderRadius: 1}}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  sx={{bgcolor: '#303030',borderRadius: 1}}
-                >
-                  <Typography>{torrent.name}</Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{borderRadius: 1}}>
-                  <Typography sx={{mt: "1%"}}>
-                    Size: {((torrent.size)/1000000).toFixed(2)} MB
-                  </Typography><br />
-                  <Box sx={{ml: "10%", mr: "10%"}}>
-                    <LinearProgress variant='determinate' value={((torrent.progress)*100).toFixed(1)}/>
-                    <span><strong>{((torrent.progress)*100).toFixed(1)}</strong></span>
-                  </Box><br />
-                </AccordionDetails>
-              </Accordion>
-              </Box>
-              <Box>
-                <Button variant="contained">Delete</Button>
-              </Box>
-              </Stack>
-              
-              {/*<div class="d-flex justify-content-center"><Alert variant='info'><span><strong>Name: </strong>{torrent.name}</span></Alert></div>
+            !data
+              ? "Loading..."
+              : data.map((torrent) => (
+                  <>
+                    <Stack direction="row" spacing={2}>
+                      <Box sx={{ ml: "5%", mb: "1%", width: "60%" }}>
+                        <Accordion sx={{ borderRadius: 1 }}>
+                          <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            sx={{ bgcolor: "#303030", borderRadius: 1 }}
+                          >
+                            <Typography>{torrent.name}</Typography>
+                          </AccordionSummary>
+                          <AccordionDetails sx={{ borderRadius: 1 }}>
+                            <Typography sx={{ mt: "1%" }}>
+                              Size: {(torrent.size / 1000000).toFixed(2)} MB
+                            </Typography>
+                            <br />
+                            <Box sx={{ ml: "10%", mr: "10%" }}>
+                              <LinearProgress
+                                variant="determinate"
+                                value={(torrent.progress * 100).toFixed(1)}
+                              />
+                              <span>
+                                <strong>
+                                  {(torrent.progress * 100).toFixed(1)}
+                                </strong>
+                              </span>
+                            </Box>
+                            <br />
+                          </AccordionDetails>
+                        </Accordion>
+                      </Box>
+                      <Box>
+                        <Button variant="contained">Delete</Button>
+                      </Box>
+                    </Stack>
+
+                    {/*<div class="d-flex justify-content-center"><Alert variant='info'><span><strong>Name: </strong>{torrent.name}</span></Alert></div>
               <div class="d-flex justify-content-center"><Alert variant='success'><span><strong>Completed: </strong>{torrent.completed}</span></Alert></div>*/}
-              </>
-            ))
-           //<span><strong>Name:</strong>{data.completed}</span>
+                  </>
+                ))
+            //<span><strong>Name:</strong>{data.completed}</span>
           }
-      </div>
+        </div>
       </ThemeProvider>
     </div>
   );
-};
-
-
-
+}
